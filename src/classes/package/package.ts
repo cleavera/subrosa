@@ -1,27 +1,34 @@
 import { Logger } from '@cleavera/debug';
 import { IDict, Maybe } from '@cleavera/types';
 import { isNull, throwError } from '@cleavera/utils';
-import { exec } from 'child_process';
-import { hashElement, HashElementNode } from 'folder-hash';
+import { Inject } from 'avaritia';
 import { promises as fs } from 'fs';
 import { basename, join } from 'path';
-import { promisify } from 'util';
 
-import { INJECTOR } from '../constants/injector.constant';
-import { CONFIG_TOKEN } from '../tokens/config.token';
-import { LOGGER_TOKEN } from '../tokens/logger.token';
+import { INJECTOR } from '../../constants/injector.constant';
+import { CONFIG_TOKEN } from '../../tokens/config.token';
+import { LOGGER_TOKEN } from '../../tokens/logger.token';
+import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
+import { PACKAGE_CACHE_TOKEN } from '../../tokens/package-cache.token';
+import { NpmService } from '../npm-service/npm-service';
+import { PackageCache } from '../package-cache/package-cache';
 
 export class Package {
     public name: string;
     public path: string;
 
-    private readonly _logger: Logger;
+    @Inject(LOGGER_TOKEN, INJECTOR)
+    private readonly _logger!: Logger;
+
+    @Inject(NPM_SERVICE_TOKEN, INJECTOR)
+    private readonly _npmService!: NpmService;
+
+    @Inject(PACKAGE_CACHE_TOKEN, INJECTOR)
+    private readonly _packageCache!: PackageCache;
 
     constructor(name: string, path: string) {
         this.name = name;
         this.path = path;
-
-        this._logger = INJECTOR.get<Logger>(LOGGER_TOKEN) ?? throwError(new Error('No logger registered'));
     }
 
     public async install(installedList: Array<string> = []): Promise<void> {
@@ -39,29 +46,7 @@ export class Package {
 
         this._logger.info(`Installing ${this.name}`);
 
-        await promisify(exec)('npm i', {
-            cwd: this.path
-        });
-    }
-
-    public async hash(): Promise<string> {
-        const hashElementNode: HashElementNode = await hashElement(this.path, {
-            folders: {
-                exclude: [
-                    'node_modules',
-                    'dist'
-                ]
-            },
-            files: {
-                include: [
-                    '*.ts',
-                    'package.json'
-                ]
-            },
-            encoding: 'hex'
-        });
-
-        return hashElementNode.hash.toString();
+        await this._npmService.install(this.path);
     }
 
     public async update(builtList: Array<string> = []): Promise<void> {
@@ -85,35 +70,11 @@ export class Package {
             return dep.name;
         }).join(', ')}]`);
 
-        const outDir: string = join(__dirname, '../.cache');
+        const packageLocations: Array<string> = await Promise.all(deps.map(async({ path, name }: Package): Promise<string> => {
+            return this._packageCache.getPackedDependency(path, name);
+        }));
 
-        try {
-            await fs.mkdir(outDir);
-        } catch (e) {
-            if (e.code !== 'EEXIST') {
-                throw e;
-            }
-        }
-
-        const packageLocations: Array<string> = [];
-
-        for (const dep of deps) {
-            const hash: string = await dep.hash();
-            const outFile: string = join(outDir, `${hash}.tgz`);
-
-            packageLocations.push(outFile);
-
-            try {
-                await fs.access(outFile);
-            } catch (e) {
-                this._logger.info(`Packing ${dep.name}`);
-                await this._packDependency(outDir, dep.path, outFile);
-            }
-        }
-
-        await promisify(exec)(`npm i ${packageLocations.join(' ')} --no-save`, {
-            cwd: this.path
-        });
+        await this._npmService.installPackages(this.path, packageLocations);
     }
 
     public async getDependencies(): Promise<Maybe<Array<Package>>> {
@@ -134,16 +95,6 @@ export class Package {
         }
 
         return packages;
-    }
-
-    private async _packDependency(cacheDirectory: string, packagePath: string, targetFilename: string): Promise<void> {
-        const { stdout } = await promisify(exec)(`npm pack ${packagePath}`, {
-            cwd: cacheDirectory
-        });
-        const outs: Array<string> = stdout.split('\n');
-        outs.pop();
-        const packedName: string = outs.pop() ?? '';
-        await fs.rename(join(cacheDirectory, packedName), targetFilename);
     }
 
     public static async FromName(name: string): Promise<Package> {

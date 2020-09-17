@@ -7,6 +7,6 @@ import { LOGGER_TOKEN } from './tokens/logger.token';
 INJECTOR.setValue(CONFIG_TOKEN, CONFIG);
 INJECTOR.setValue(LOGGER_TOKEN, LOGGER);
 
-export { Package } from './classes/package';
+export { Package } from './classes/package/package';
 export { LOGGER };
 export { CONFIG };

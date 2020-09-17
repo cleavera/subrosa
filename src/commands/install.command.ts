@@ -2,7 +2,7 @@ import { throwError } from '@cleavera/utils';
 import { join } from 'path';
 import { CommandBuilder, CommandModule } from 'yargs';
 
-import { Package } from '../classes/package';
+import { Package } from '../classes/package/package';
 import { INJECTOR } from '../constants/injector.constant';
 import { CONFIG_TOKEN } from '../tokens/config.token';
 

@@ -19,7 +19,7 @@
     "@cleavera/debug": "^1.0.1",
     "@cleavera/utils": "^4.2.1",
     "@types/folder-hash": "^3.3.0",
-    "avaritia": "^1.0.1",
+    "avaritia": "^1.1.0",
     "folder-hash": "^3.3.2",
     "yargs": "^16.0.3"
   },
