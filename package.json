@@ -1,0 +1,41 @@
+{
+  "name": "@subrosa/cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "del-cli ./dist",
+    "lint": "npx eslint ./src/**/*.ts",
+    "prepack": "npm run lint && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anthony Cleaver",
+  "license": "ISC",
+  "bin": {
+    "subrosa": "./dist/cli.js"
+  },
+  "dependencies": {
+    "@cleavera/debug": "^1.0.1",
+    "@cleavera/utils": "^4.2.1",
+    "@types/folder-hash": "^3.3.0",
+    "avaritia": "^1.0.1",
+    "folder-hash": "^3.3.2",
+    "yargs": "^16.0.3"
+  },
+  "devDependencies": {
+    "@cleavera/config": "^2.5.0",
+    "@cleavera/types": "^1.0.3",
+    "@types/node": "^13.13.16",
+    "@types/npm": "^2.0.31",
+    "@types/yargs": "^15.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
+    "eslint": "^7.8.1",
+    "eslint-plugin-import": "^2.22.0",
+    "typescript": "^3.9.7"
+  },
+  "files": [
+    "dist"
+  ]
+}
