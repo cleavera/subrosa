@@ -53,12 +53,12 @@ export class Package {
         await this._npmService.install(this.path);
     }
 
-    public async update(builtList: Array<string> = []): Promise<void> {
-        if (builtList.includes(this.name)) {
+    public async update(builtList: Set<string> = new Set<string>()): Promise<void> {
+        if (builtList.has(this.name)) {
             return;
         }
 
-        builtList.push(this.name);
+        builtList.add(this.name);
 
         const deps: Maybe<Array<Package>> = await this.getDependencies();
 
