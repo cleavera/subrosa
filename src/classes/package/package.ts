@@ -2,14 +2,15 @@ import { Logger } from '@cleavera/debug';
 import { IDict, Maybe } from '@cleavera/types';
 import { isNull, throwError } from '@cleavera/utils';
 import { Inject } from 'avaritia';
-import { promises as fs } from 'fs';
 import { basename, join } from 'path';
 
 import { INJECTOR } from '../../constants/injector.constant';
 import { CONFIG_TOKEN } from '../../tokens/config.token';
+import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
 import { LOGGER_TOKEN } from '../../tokens/logger.token';
 import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
 import { PACKAGE_CACHE_TOKEN } from '../../tokens/package-cache.token';
+import { FileService } from '../file-service/file-service';
 import { NpmService } from '../npm-service/npm-service';
 import { PackageCache } from '../package-cache/package-cache';
 
@@ -25,6 +26,9 @@ export class Package {
 
     @Inject(PACKAGE_CACHE_TOKEN, INJECTOR)
     private readonly _packageCache!: PackageCache;
+
+    @Inject(FILE_SERVICE_TOKEN, INJECTOR)
+    private readonly _fileService!: FileService;
 
     constructor(name: string, path: string) {
         this.name = name;
@@ -78,9 +82,7 @@ export class Package {
     }
 
     public async getDependencies(): Promise<Maybe<Array<Package>>> {
-        const packageFile: { peerDependencies: IDict<string>; } = JSON.parse(await fs.readFile(join(this.path, './package.json'), {
-            encoding: 'utf-8'
-        }));
+        const packageFile: { peerDependencies: IDict<string>; } = await this._fileService.readJsonFile<{ peerDependencies: IDict<string>; }>(join(this.path, './package.json'));
 
         const packages: Array<Package> = [];
 

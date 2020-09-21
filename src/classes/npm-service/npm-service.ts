@@ -1,14 +1,18 @@
-import { Injectable } from 'avaritia';
+import { Inject, Injectable } from 'avaritia';
 import { exec } from 'child_process';
-import { promises as fs } from 'fs';
-import { join, dirname } from 'path';
+import { dirname, join } from 'path';
 import { promisify } from 'util';
 
 import { INJECTOR } from '../../constants/injector.constant';
+import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
 import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
+import { FileService } from '../file-service/file-service';
 
 @Injectable(NPM_SERVICE_TOKEN, INJECTOR)
 export class NpmService {
+    @Inject(FILE_SERVICE_TOKEN, INJECTOR)
+    private readonly _fileService!: FileService;
+
     public async install(cwd: string): Promise<void> {
         await promisify(exec)('npm i', {
             cwd
@@ -30,6 +34,6 @@ export class NpmService {
         const outs: Array<string> = stdout.split('\n');
         outs.pop();
         const packedName: string = outs.pop() ?? '';
-        await fs.rename(join(targetDirectory, packedName), targetFilename);
+        await this._fileService.rename(join(targetDirectory, packedName), targetFilename);
     }
 }
