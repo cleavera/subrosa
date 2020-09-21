@@ -4,6 +4,7 @@ import { dirname, join } from 'path';
 import { promisify } from 'util';
 
 import { INJECTOR } from '../../constants/injector.constant';
+import { EXEC_TOKEN } from '../../tokens/exec.token';
 import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
 import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
 import { FileService } from '../file-service/file-service';
@@ -13,21 +14,24 @@ export class NpmService {
     @Inject(FILE_SERVICE_TOKEN, INJECTOR)
     private readonly _fileService!: FileService;
 
+    @Inject(EXEC_TOKEN, INJECTOR)
+    private readonly _exec!: typeof exec;
+
     public async install(cwd: string): Promise<void> {
-        await promisify(exec)('npm i', {
+        await promisify(this._exec)('npm i', {
             cwd
         });
     }
 
     public async installPackages(cwd: string, packageLocations: Array<string>): Promise<void> {
-        await promisify(exec)(`npm i ${packageLocations.join(' ')} --no-save`, {
+        await promisify(this._exec)(`npm i ${packageLocations.join(' ')} --no-save`, {
             cwd
         });
     }
 
     public async pack(targetFilename: string, packagePath: string): Promise<void> {
         const targetDirectory: string = dirname(targetFilename);
-        const { stdout } = await promisify(exec)(`npm pack ${packagePath}`, {
+        const { stdout } = await promisify(this._exec)(`npm pack ${packagePath}`, {
             cwd: targetDirectory
         });
 
