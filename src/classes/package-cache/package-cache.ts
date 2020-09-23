@@ -5,6 +5,7 @@ import { join } from 'path';
 
 import { INJECTOR } from '../../constants/injector.constant';
 import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
+import { HASH_ELEMENT_TOKEN } from '../../tokens/hash-element.token';
 import { LOGGER_TOKEN } from '../../tokens/logger.token';
 import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
 import { PACKAGE_CACHE_TOKEN } from '../../tokens/package-cache.token';
@@ -24,6 +25,9 @@ export class PackageCache {
     @Inject(FILE_SERVICE_TOKEN, INJECTOR)
     private readonly _fileService!: FileService;
 
+    @Inject(HASH_ELEMENT_TOKEN, INJECTOR)
+    private readonly _hashElement!: typeof hashElement;
+
     public async getPackedDependency(path: string, packageName: string): Promise<string> {
         await this._fileService.createDir(PackageCache._CACHE_DIRECTORY);
 
@@ -39,7 +43,7 @@ export class PackageCache {
     }
 
     public async hashPackage(packagePath: string): Promise<string> {
-        const hashElementNode: HashElementNode = await hashElement(packagePath, {
+        const hashElementNode: HashElementNode = await this._hashElement(packagePath, {
             folders: {
                 exclude: [
                     'node_modules',
