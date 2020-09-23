@@ -2,8 +2,8 @@ import { Inject, Injectable } from 'avaritia';
 import { promises as fs } from 'fs';
 
 import { INJECTOR } from '../../constants/injector.constant';
-import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
-import { FS_TOKEN } from '../../tokens/fs.token';
+import { FS_TOKEN } from '../../providers/fs/fs.token';
+import { FILE_SERVICE_TOKEN } from './file-service.token';
 
 @Injectable(FILE_SERVICE_TOKEN, INJECTOR)
 export class FileService {

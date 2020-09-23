@@ -4,7 +4,7 @@ import { command } from 'yargs';
 
 import { InstallCommand } from './commands/install.command';
 import { UpdateCommand } from './commands/update.command';
-import { LOGGER } from './constants/logger.constant';
+import { LOGGER } from './providers/logger/logger.constant';
 import { setupInjector } from './setup-injector';
 
 setupInjector();

@@ -1,14 +1,14 @@
-import { CONFIG } from './constants/config.constant';
-import { EXEC } from './constants/exec.constant';
-import { FS } from './constants/fs.constant';
-import { HASH_ELEMENT } from './constants/hash-element.constant';
 import { INJECTOR } from './constants/injector.constant';
-import { LOGGER } from './constants/logger.constant';
-import { CONFIG_TOKEN } from './tokens/config.token';
-import { EXEC_TOKEN } from './tokens/exec.token';
-import { FS_TOKEN } from './tokens/fs.token';
-import { HASH_ELEMENT_TOKEN } from './tokens/hash-element.token';
-import { LOGGER_TOKEN } from './tokens/logger.token';
+import { CONFIG } from './providers/config/config.constant';
+import { CONFIG_TOKEN } from './providers/config/config.token';
+import { EXEC } from './providers/exec/exec.constant';
+import { EXEC_TOKEN } from './providers/exec/exec.token';
+import { FS } from './providers/fs/fs.constant';
+import { FS_TOKEN } from './providers/fs/fs.token';
+import { HASH_ELEMENT } from './providers/hash-element/hash-element.constant';
+import { HASH_ELEMENT_TOKEN } from './providers/hash-element/hash-element.token';
+import { LOGGER } from './providers/logger/logger.constant';
+import { LOGGER_TOKEN } from './providers/logger/logger.token';
 
 export function setupInjector(): void {
     INJECTOR.setValue(CONFIG_TOKEN, CONFIG);

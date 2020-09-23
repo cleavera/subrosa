@@ -4,10 +4,10 @@ import { dirname, join } from 'path';
 import { promisify } from 'util';
 
 import { INJECTOR } from '../../constants/injector.constant';
-import { EXEC_TOKEN } from '../../tokens/exec.token';
-import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
-import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
+import { EXEC_TOKEN } from '../../providers/exec/exec.token';
 import { FileService } from '../file-service/file-service';
+import { FILE_SERVICE_TOKEN } from '../file-service/file-service.token';
+import { NPM_SERVICE_TOKEN } from './npm-service.token';
 
 @Injectable(NPM_SERVICE_TOKEN, INJECTOR)
 export class NpmService {

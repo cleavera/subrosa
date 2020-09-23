@@ -5,14 +5,14 @@ import { Inject } from 'avaritia';
 import { basename, join } from 'path';
 
 import { INJECTOR } from '../../constants/injector.constant';
-import { CONFIG_TOKEN } from '../../tokens/config.token';
-import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
-import { LOGGER_TOKEN } from '../../tokens/logger.token';
-import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
-import { PACKAGE_CACHE_TOKEN } from '../../tokens/package-cache.token';
+import { CONFIG_TOKEN } from '../../providers/config/config.token';
+import { LOGGER_TOKEN } from '../../providers/logger/logger.token';
 import { FileService } from '../file-service/file-service';
+import { FILE_SERVICE_TOKEN } from '../file-service/file-service.token';
 import { NpmService } from '../npm-service/npm-service';
+import { NPM_SERVICE_TOKEN } from '../npm-service/npm-service.token';
 import { PackageCache } from '../package-cache/package-cache';
+import { PACKAGE_CACHE_TOKEN } from '../package-cache/package-cache.token';
 
 export class Package {
     public name: string;

@@ -4,13 +4,13 @@ import { hashElement, HashElementNode } from 'folder-hash';
 import { join } from 'path';
 
 import { INJECTOR } from '../../constants/injector.constant';
-import { FILE_SERVICE_TOKEN } from '../../tokens/file-service.token';
-import { HASH_ELEMENT_TOKEN } from '../../tokens/hash-element.token';
-import { LOGGER_TOKEN } from '../../tokens/logger.token';
-import { NPM_SERVICE_TOKEN } from '../../tokens/npm-service.token';
-import { PACKAGE_CACHE_TOKEN } from '../../tokens/package-cache.token';
+import { HASH_ELEMENT_TOKEN } from '../../providers/hash-element/hash-element.token';
+import { LOGGER_TOKEN } from '../../providers/logger/logger.token';
 import { FileService } from '../file-service/file-service';
+import { FILE_SERVICE_TOKEN } from '../file-service/file-service.token';
 import { NpmService } from '../npm-service/npm-service';
+import { NPM_SERVICE_TOKEN } from '../npm-service/npm-service.token';
+import { PACKAGE_CACHE_TOKEN } from './package-cache.token';
 
 @Injectable(PACKAGE_CACHE_TOKEN, INJECTOR)
 export class PackageCache {

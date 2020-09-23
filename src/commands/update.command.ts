@@ -4,7 +4,7 @@ import { CommandBuilder, CommandModule } from 'yargs';
 
 import { Package } from '../classes/package/package';
 import { INJECTOR } from '../constants/injector.constant';
-import { CONFIG_TOKEN } from '../tokens/config.token';
+import { CONFIG_TOKEN } from '../providers/config/config.token';
 
 interface IArgs {
     prefix: string;
