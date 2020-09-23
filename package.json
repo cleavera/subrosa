@@ -8,7 +8,7 @@
     "clean": "del-cli ./dist",
     "lint": "npx eslint ./src/**/*.ts",
     "prepack": "npm run lint && npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "alsatian ./src/**/*.spec.ts"
   },
   "author": "Anthony Cleaver",
   "license": "ISC",
@@ -31,6 +31,7 @@
     "@types/yargs": "^15.0.5",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
+    "alsatian": "^3.2.1",
     "eslint": "^7.8.1",
     "eslint-plugin-import": "^2.22.0",
     "typescript": "^3.9.7"
