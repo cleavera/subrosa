@@ -6,7 +6,7 @@ import { IExec } from '../../../providers/exec/exec.interface';
 import { ExecStubFactory } from '../../../providers/exec/exec.stub';
 import { EXEC_TOKEN } from '../../../providers/exec/exec.token';
 import { FileService } from '../../file-service/file-service';
-import { FileServiceStubFactory } from '../../file-service/file-service.spec';
+import { FileServiceStubFactory } from '../../file-service/file-service.stub';
 import { FILE_SERVICE_TOKEN } from '../../file-service/file-service.token';
 import { NpmService } from '../npm-service';
 
