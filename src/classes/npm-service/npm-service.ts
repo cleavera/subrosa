@@ -1,9 +1,8 @@
 import { Inject, Injectable } from 'avaritia';
-import { exec } from 'child_process';
 import { dirname, join } from 'path';
-import { promisify } from 'util';
 
 import { INJECTOR } from '../../constants/injector.constant';
+import { IExec } from '../../providers/exec/exec.interface';
 import { EXEC_TOKEN } from '../../providers/exec/exec.token';
 import { FileService } from '../file-service/file-service';
 import { FILE_SERVICE_TOKEN } from '../file-service/file-service.token';
@@ -15,23 +14,23 @@ export class NpmService {
     private readonly _fileService!: FileService;
 
     @Inject(EXEC_TOKEN, INJECTOR)
-    private readonly _exec!: typeof exec;
+    private readonly _exec!: IExec;
 
     public async install(cwd: string): Promise<void> {
-        await promisify(this._exec)('npm i', {
+        await this._exec('npm i', {
             cwd
         });
     }
 
     public async installPackages(cwd: string, packageLocations: Array<string>): Promise<void> {
-        await promisify(this._exec)(`npm i ${packageLocations.join(' ')} --no-save`, {
+        await this._exec(`npm i ${packageLocations.join(' ')} --no-save`, {
             cwd
         });
     }
 
     public async pack(targetFilename: string, packagePath: string): Promise<void> {
         const targetDirectory: string = dirname(targetFilename);
-        const { stdout } = await promisify(this._exec)(`npm pack ${packagePath}`, {
+        const { stdout } = await this._exec(`npm pack ${packagePath}`, {
             cwd: targetDirectory
         });
 
