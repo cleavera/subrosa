@@ -31,7 +31,7 @@ export class PackageCache {
     public async getPackedDependency(path: string, packageName: string): Promise<string> {
         await this._fileService.createDir(PackageCache._CACHE_DIRECTORY);
 
-        const hash: string = await this.hashPackage(path);
+        const hash: string = await this._hashPackage(path);
         const outFile: string = join(PackageCache._CACHE_DIRECTORY, `${hash}.tgz`);
 
         if (!await this._fileService.exists(outFile)) {
@@ -42,7 +42,7 @@ export class PackageCache {
         return outFile;
     }
 
-    public async hashPackage(packagePath: string): Promise<string> {
+    private async _hashPackage(packagePath: string): Promise<string> {
         const hashElementNode: HashElementNode = await this._hashElement(packagePath, {
             folders: {
                 exclude: [
