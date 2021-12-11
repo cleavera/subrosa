@@ -9,7 +9,7 @@ import { setupInjector } from './setup-injector';
 
 setupInjector();
 
-// eslint-disable-next-line no-unused-expressions
+// eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-floating-promises
 command(new InstallCommand())
     .command(new UpdateCommand())
     .argv;

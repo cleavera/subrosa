@@ -16,7 +16,7 @@ export class FileService {
 
             return true;
         } catch (e) {
-            if (e.code === 'ENOENT') {
+            if ((e as { code: string; }).code === 'ENOENT') {
                 return false;
             }
 
@@ -28,7 +28,7 @@ export class FileService {
         try {
             await this._fs.mkdir(dir);
         } catch (e) {
-            if (e.code !== 'EEXIST') {
+            if ((e as { code: string; }).code !== 'EEXIST') {
                 throw e;
             }
         }

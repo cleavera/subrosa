@@ -1,0 +1,7 @@
+*.spec.js
+*.stub.js
+src
+.eslintrc.json
+*.tgz
+tsconfig.json
+.idea

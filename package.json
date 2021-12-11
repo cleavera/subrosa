@@ -7,8 +7,8 @@
     "build": "npm run clean && tsc",
     "clean": "del-cli ./dist",
     "lint": "npx eslint ./src/**/*.ts",
-    "prepack": "npm run lint && npm run build",
-    "test": "alsatian ./src/**/*.spec.ts"
+    "prepack": "npm run lint && npm run build && npm run test",
+    "test": "alsatian ./src/**/*.spec.ts --tap"
   },
   "author": "Anthony Cleaver",
   "license": "ISC",
@@ -16,27 +16,23 @@
     "subrosa": "./dist/cli.js"
   },
   "dependencies": {
-    "@cleavera/debug": "^1.0.1",
+    "@cleavera/debug": "^1.1.0",
+    "@cleavera/types": "^1.0.3",
     "@cleavera/utils": "^4.2.1",
-    "@types/folder-hash": "^3.3.0",
+    "@types/node": "^16.11.12",
+    "@types/yargs": "^17.0.7",
+    "@types/folder-hash": "^4.0.1",
     "avaritia": "^1.1.0",
-    "folder-hash": "^3.3.2",
-    "yargs": "^16.0.3"
+    "folder-hash": "^4.0.1",
+    "yargs": "^17.3.0"
   },
   "devDependencies": {
-    "@cleavera/config": "^2.5.0",
-    "@cleavera/types": "^1.0.3",
-    "@types/node": "^13.13.16",
-    "@types/npm": "^2.0.31",
-    "@types/yargs": "^15.0.5",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
+    "@cleavera/config": "^2.8.2",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
     "alsatian": "^3.2.1",
-    "eslint": "^7.8.1",
-    "eslint-plugin-import": "^2.22.0",
-    "typescript": "^4.0.3"
-  },
-  "files": [
-    "dist"
-  ]
+    "eslint": "^8.4.1",
+    "eslint-plugin-import": "^2.25.3",
+    "typescript": "^4.5.3"
+  }
 }
