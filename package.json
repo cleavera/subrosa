@@ -10,6 +10,9 @@
     "prepack": "npm run lint && npm run build && npm run test",
     "test": "alsatian ./src/**/*.spec.ts --tap"
   },
+  "repository": {
+    "url": "https://github.com/cleavera/subrosa.git"
+  },
   "author": "Anthony Cleaver",
   "license": "ISC",
   "bin": {
