@@ -55,6 +55,6 @@ export class NpmServicePackSpec {
 
         await Promise.resolve();
 
-        Expect(this._fileService.rename).toHaveBeenCalledWith('target\\test-packed-file.tgz', targetFilename);
+        Expect(this._fileService.rename).toHaveBeenCalledWith('target/test-packed-file.tgz', targetFilename);
     }
 }

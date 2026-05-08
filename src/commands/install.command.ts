@@ -8,7 +8,7 @@ import { CONFIG_TOKEN } from '../providers/config/config.token';
 
 interface IArgs {
     prefix: string;
-    root: string;
+    path: string;
 }
 
 export class InstallCommand implements CommandModule<{}, IArgs> {
@@ -21,17 +21,17 @@ export class InstallCommand implements CommandModule<{}, IArgs> {
             describe: 'The prefix for packages inside this repo',
             demandOption: true
         },
-        root: {
+        path: {
             type: 'string',
-            describe: 'The root of the repository',
+            describe: 'The path to the packages',
             demandOption: true
         }
     };
 
-    public async handler({ prefix, root }: IArgs): Promise<void> {
+    public async handler({ prefix, path }: IArgs): Promise<void> {
         const config: Map<string, string> = INJECTOR.get<Map<string, string>>(CONFIG_TOKEN) ?? throwError(new Error('No config found in injector'));
         config.set('prefix', prefix);
-        config.set('root', join(process.cwd(), root));
+        config.set('path', join(process.cwd(), path));
 
         const pkg: Package = await Package.FromPath(process.cwd());
 

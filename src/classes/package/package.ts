@@ -1,9 +1,6 @@
 import { Logger } from '@cleavera/debug';
-import { IDict, Maybe } from '@cleavera/types';
-import { isNull, throwError } from '@cleavera/utils';
-import { Inject } from 'avaritia';
+import { throwError } from '@cleavera/utils';
 import { basename, join } from 'path';
-
 import { INJECTOR } from '../../constants/injector.constant';
 import { CONFIG_TOKEN } from '../../providers/config/config.token';
 import { LOGGER_TOKEN } from '../../providers/logger/logger.token';
@@ -14,21 +11,15 @@ import { NPM_SERVICE_TOKEN } from '../npm-service/npm-service.token';
 import { PackageCache } from '../package-cache/package-cache';
 import { PACKAGE_CACHE_TOKEN } from '../package-cache/package-cache.token';
 
+
 export class Package {
     public name: string;
     public path: string;
 
-    @Inject(LOGGER_TOKEN, INJECTOR)
-    private readonly _logger!: Logger;
-
-    @Inject(NPM_SERVICE_TOKEN, INJECTOR)
-    private readonly _npmService!: NpmService;
-
-    @Inject(PACKAGE_CACHE_TOKEN, INJECTOR)
-    private readonly _packageCache!: PackageCache;
-
-    @Inject(FILE_SERVICE_TOKEN, INJECTOR)
-    private readonly _fileService!: FileService;
+    private readonly _logger: Logger = INJECTOR.get<Logger>(LOGGER_TOKEN);
+    private readonly _npmService: NpmService = INJECTOR.get<NpmService>(NPM_SERVICE_TOKEN);
+    private readonly _packageCache: PackageCache = INJECTOR.get<PackageCache>(PACKAGE_CACHE_TOKEN);
+    private readonly _fileService: FileService = INJECTOR.get<FileService>(FILE_SERVICE_TOKEN);
 
     constructor(name: string, path: string) {
         this.name = name;
@@ -60,9 +51,9 @@ export class Package {
 
         builtList.add(this.name);
 
-        const deps: Maybe<Array<Package>> = await this.getDependencies();
+        const deps: Array<Package> | null = await this.getDependencies();
 
-        if (isNull(deps)) {
+        if (deps === null) {
             return;
         }
 
@@ -81,8 +72,8 @@ export class Package {
         await this._npmService.installPackages(this.path, packageLocations);
     }
 
-    public async getDependencies(): Promise<Maybe<Array<Package>>> {
-        const packageFile: { peerDependencies: IDict<string>; } = await this._fileService.readJsonFile<{ peerDependencies: IDict<string>; }>(join(this.path, './package.json'));
+    public async getDependencies(): Promise<Array<Package> | null> {
+        const packageFile: { peerDependencies: Record<string, string>; } = await this._fileService.readJsonFile<{ peerDependencies: Record<string, string>; }>(join(this.path, './package.json'));
 
         const packages: Array<Package> = [];
 
@@ -101,7 +92,7 @@ export class Package {
 
     public static async FromName(name: string): Promise<Package> {
         const [, folder] = name.split('/');
-        const path: string = join(this._getRoot(), './packages', folder);
+        const path: string = join(this._getPath(), folder);
 
         return new Package(name, path);
     }
@@ -123,9 +114,9 @@ export class Package {
         return `@${prefix}`;
     }
 
-    private static _getRoot(): string {
+    private static _getPath(): string {
         const config: Map<string, string> = this._getConfig();
 
-        return config.get('root') ?? throwError(new Error('No root on the config'));
+        return config.get('path') ?? throwError(new Error('No root on the config'));
     }
 }

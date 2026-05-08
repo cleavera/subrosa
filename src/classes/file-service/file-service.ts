@@ -1,14 +1,12 @@
-import { Inject, Injectable } from 'avaritia';
+import { Injectable } from 'avaritia';
 import { promises as fs } from 'fs';
-
 import { INJECTOR } from '../../constants/injector.constant';
 import { FS_TOKEN } from '../../providers/fs/fs.token';
 import { FILE_SERVICE_TOKEN } from './file-service.token';
 
 @Injectable(FILE_SERVICE_TOKEN, INJECTOR)
 export class FileService {
-    @Inject(FS_TOKEN, INJECTOR)
-    private readonly _fs!: typeof fs;
+    private readonly _fs: typeof fs = INJECTOR.get<typeof fs>(FS_TOKEN);
 
     public async exists(filePath: string): Promise<boolean> {
         try {
